@@ -1,0 +1,6 @@
+piVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    kubernetes.io/metadata.name: kube-acpodnaming
+  name: kube-acpodnaming

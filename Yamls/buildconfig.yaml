@@ -1,0 +1,21 @@
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: acpodnaming-build
+  labels:
+    name: acpodnaming-build
+  annotations:
+    template.alpha.openshift.io/wait-for-ready: 'true'
+spec:
+  strategy:
+    type: Custom
+    customStrategy:
+      forcePull: true
+      from:
+        kind: ImageStreamTag
+        name: custom-buildah-image:latest
+        namespace: kube-acpodnaming
+  output:
+    to:
+      kind: ImageStreamTag
+      name: acpodnaming:latest
