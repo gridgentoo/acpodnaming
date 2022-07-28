@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: acpodnaming
+  name: acpodnaming
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: acpodnaming
+  template:
+    metadata:
+      labels:
+        app: acpodnaming
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - acpodnaming
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - image: image-registry.openshift-image-registry.svc:5000/kube-acpodnaming/acpodnaming
+        name: acpodnaming
+        ports:
+        - containerPort: 8443
+        env:
+        - name: POD_NAMING
+          value: kuku
+        - name: CERT_FILE
+          value: '/opt/app-root/tls/tls.crt'
+        - name: KEY_FILE
+          value: '/opt/app-root/tls/tls.key'
+        - name: PORT 
+          value: '8443'
+        volumeMounts:
+        - name: acpodnaming-certs
+          mountPath: /opt/app-root/tls/
+          readOnly: true
+      volumes:
+      - name: acpodnaming-certs
+        secret:
+          secretName: acpodnaming-tls
