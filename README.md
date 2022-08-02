@@ -13,8 +13,48 @@ webhook we have created.
 the Deployment Steps are :
 
 1. create the namespace
-2. create the service (that will create the secret)
-3. create the deployment resource.
-4. create the validating webhook resource and point it to the service
+2. create the image on OpenShift
+3. create the service (that will create the secret)
+4. create the deployment resource.
+5. create the validating webhook resource and point it to the service
 
 ### creating the Name Space
+
+In a very simple way we can just create the yaml file 
+
+```bash
+# oc apply -f Yamls/namespace.yaml
+```
+
+### Running the build
+Once the namespce is created we can start the build process which describes [here](build.md)
+
+### Creating the Service
+
+We need to create the service before we create the deployment because the service creates the secret 
+the Pods needs to load and run internally 
+```bash
+# oc apply -f Yamls/service.yaml
+```
+
+### Run the Deployment
+Now we can run the deployment with secret which was created automatically from the service :
+I would recommand to change the POD_NAMING evironment variable to fit your needed naming request
+
+```bash
+# export MY_NAME=<your name>
+# sed -i "s/kuku/$MY_NAME/g" Yamls/deployment.yaml
+```
+Now we can deploy the pods
+
+```bash
+# oc apply -f Yamls/deployment.yaml
+```
+
+For the final step we can deploy the validation webhook configuration :
+```bash
+# oc apply -f Yamls/ValidatingWebhookConfiguration.yaml
+```
+
+That is it 
+Now for each of the 
