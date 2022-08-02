@@ -70,12 +70,6 @@ func (gs *myValidServerhandler) serve(w http.ResponseWriter, r *http.Request) {
 	}
 
 
-	if !isKubeNamespace(arRequest.Request.Namespace) {
-		fmt.Fprintf(os.Stderr, "The Name of the Namespace is invalid")
-		http.Error(w,"The Name of the Namespace is invalid",http.StatusBadRequest)
-		return
-	}
-
 	raw := arRequest.Request.Object.Raw
 	pod := corev1.Pod{}
 
@@ -96,7 +90,7 @@ func (gs *myValidServerhandler) serve(w http.ResponseWriter, r *http.Request) {
 	podName, _ := os.LookupEnv("POD_NAMING")
 
 	podNamingReg := regexp.MustCompile(podName)
-	if podNamingReg.MatchString(string(pod.Name)) {
+	if podNamingReg.MatchString(string(pod.Name)) || isKubeNamespace(arRequest.Request.Namespace) {
 		fmt.Fprintf(os.Stdout, "The Pod is up to the naming standard\n")
 		arResponse.Response.Allowed = true
 		arResponse.Response.Result = &metav1.Status{Status: "Success", 

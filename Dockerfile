@@ -1,18 +1,11 @@
-FROM golang:alpine AS builder
-
-RUN mkdir -p /opt/app-root/src/acpodnaming
-WORKDIR /opt/app-root/src/acpodnaming
-ENV GOPATH=/opt/app-root/
-ENV PATH="${PATH}:/opt/app-root/src/go/bin/"
-COPY  src/acpodnaming .
-
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o acpodnaming
-
-FROM scratch
-COPY --from=builder  /etc/passwd /etc/passwd
-COPY --from=builder  /opt/app-root/src/acpodnaming/acpodnaming /usr/bin/
-USER nobody
-
-EXPOSE 8080 8443
-
-CMD ["/usr/bin/acpodnaming"]
+FROM registry.redhat.io/rhel8/buildah
+# In this example, `/tmp/build` contains the inputs that build when this
+# custom builder image is run. Normally the custom builder image fetches
+# this content from some location at build time, by using git clone as an example.
+ADD Dockerfile.acpodnaming /tmp/input/Dockerfile
+WORKDIR /tmp/input
+ADD src /tmp/input
+ADD build.sh /usr/bin
+# /usr/bin/build.sh contains the actual custom build logic that will be run when
+# this custom builder image is run.
+ENTRYPOINT ["/usr/bin/build.sh"]

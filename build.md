@@ -20,3 +20,16 @@ script and use the oc commands to genreate it (in our new Namespace)
 ```bash
 # oc apply -f ../Yamls/namespace.yaml
 ```
+
+#### buildah build 
+Now we need to create a new build to us buildah and run the biuld 
+
+```bash
+# oc new-build --binary --strategy=docker --name custom-buildah-image
+```
+and start the build
+
+```bash
+# oc start-build custom-builder-image --from-dir . -F
+```
+
