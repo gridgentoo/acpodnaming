@@ -30,6 +30,27 @@ Now we need to create a new build to us buildah and run the biuld
 and start the build
 
 ```bash
-# oc start-build custom-builder-image --from-dir . -F
+# oc start-build custom-buildah-image --from-dir . -F
 ```
 
+Now that we have the custom build image we can move on and build the image we are going to us 
+
+#### building acpodnaming
+
+first let's apply the buildConfig we need for ACpodnaming :
+
+```bash
+# oc apply -f Yamls/buildconfig.yaml
+```
+
+and let's create the image stream :
+```bash
+# oc apply -f Yamls/imagestream.yaml
+```
+
+And now we can start the build process :
+```bash
+# oc start-build acpodnaming-build -F
+```
+
+Your Image should be ready in your OpenShift Local registry
