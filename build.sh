@@ -1,7 +1,7 @@
 #!/bin/sh
 # Note that in this case the build inputs are part of the custom builder image, but normally this
 # is retrieved from an external source.
-cd /tmp/input
+cd /tmp/input/
 # OUTPUT_REGISTRY and OUTPUT_IMAGE are env variables provided by the custom
 # build framework
 TAG="${OUTPUT_REGISTRY}/${OUTPUT_IMAGE}"

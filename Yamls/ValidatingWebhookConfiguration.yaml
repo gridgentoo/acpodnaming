@@ -3,7 +3,7 @@ kind: ValidatingWebhookConfiguration
 metadata:
   name: "acpodnaming.kubernetes.io" 
   annotations: 
-    service.beta.openshift.io/inject-cabundle: true
+    service.beta.openshift.io/inject-cabundle: "true"
 webhooks:
 - name: "acpodnaming.kubernetes.io"
   namespaceSelector:
