@@ -17,14 +17,14 @@ type myValidServerhandler struct {
 }
 	
 func isKubeNamespace(ns_name string) bool {
-	nsFlag := true
+	nsFlag := false
 	nsNaming := regexp.MustCompile(`^kube`)
 	if nsNaming.MatchString(ns_name) {
-		nsFlag = false
+		nsFlag = true
 	}
 	nsNaming = regexp.MustCompile(`^openshift`)
 	if nsNaming.MatchString(ns_name) {
-		nsFlag = false
+		nsFlag = true
 	}
 
 	return nsFlag

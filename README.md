@@ -56,5 +56,12 @@ For the final step we can deploy the validation webhook configuration :
 # oc apply -f Yamls/ValidatingWebhookConfiguration.yaml
 ```
 
+## Testing
+
+if you want to test your deployment you can follow the steps describes [here](test.md)
+
 That is it 
-Now for each of the 
+
+If you have any question feel free to responed/ leave a comment.  
+You can find on linkedin at : https://www.linkedin.com/in/orenoichman  
+Or twitter at : https://twitter.com/ooichman  
