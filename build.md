@@ -15,12 +15,6 @@ steps to build and use the OpenShift tools to create the Image.
 In order to create a custom build image we can use the Docker in the corrent directory with the build.sh
 script and use the oc commands to genreate it (in our new Namespace)
 
-#### Creating the Name Space
-
-```bash
-# oc apply -f ../Yamls/namespace.yaml
-```
-
 #### buildah build 
 Now we need to create a new build to us buildah and run the biuld 
 
