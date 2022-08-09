@@ -11,6 +11,11 @@ import (
 	"syscall"
 )
 
+type myValidServerhandler struct {
+	podNaming string
+	podRegextype string
+}
+
 var (
 	tlscert, tlskey string
 )
@@ -40,19 +45,31 @@ func main() {
 
 	port := getEnv("PORT", "8080")
 
-	_, err_pn := os.LookupEnv("POD_NAMING")
+	
+	myPodRegex := getEnv("POD_REGEX","contains")
 
+	if myPodRegex != "contains" && myPodRegex != "starts"  {
+		fmt.Fprintf(os.Stderr,"environment variable POD_REGEX Must be equal to [contains|starts]\n")
+		os.Exit(4)
+	}
+	
+	myPodNaming, err_pn := os.LookupEnv("POD_NAMING")
+	
 	if !err_pn {
 		fmt.Fprintf(os.Stderr,"no environment variable POD_NAMING provided\n")
 		os.Exit(3)	
 	}
+
+	gs := myValidServerhandler{}
+	gs.podNaming = myPodNaming
+	gs.podRegextype = myPodRegex
 
 	server := &http.Server {
 		Addr: fmt.Sprintf(":%v", port),
 		TLSConfig: &tls.Config{Certificates: []tls.Certificate{certs}},
 	}
 
-	gs := myValidServerhandler{}
+	
 	mux := http.NewServeMux()
 	mux.HandleFunc("/validate", gs.serve)
 	server.Handler = mux

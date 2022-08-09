@@ -12,9 +12,6 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	corev1 "k8s.io/api/core/v1"
 )
-
-type myValidServerhandler struct {
-}
 	
 func isKubeNamespace(ns_name string) bool {
 	nsFlag := false
@@ -81,14 +78,19 @@ func (gs *myValidServerhandler) serve(w http.ResponseWriter, r *http.Request) {
 
 	arResponse := admissionv1.AdmissionReview {
 		Response: &admissionv1.AdmissionResponse{
-			Result: &metav1.Status{Status: "Failure", Message: "The Pod name is NOT up to code with the pod naming requirements", Code: 401},
+			Result: &metav1.Status{Status: "Failure", 
+			Message: "The Pod name is NOT up to code with the pod naming requirements", 
+			Code: 401},
 			UID: arRequest.Request.UID,
 			Allowed: false,
 		},
 	}
 	
-	podName, _ := os.LookupEnv("POD_NAMING")
+	podName := gs.podNaming
 
+	if gs.podRegextype == "starts" {
+		podName = "^" + podName
+	}
 	podNamingReg := regexp.MustCompile(podName)
 	if podNamingReg.MatchString(string(pod.Name)) || isKubeNamespace(arRequest.Request.Namespace) {
 		fmt.Fprintf(os.Stdout, "The Pod is up to the naming standard\n")
